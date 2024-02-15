@@ -121,7 +121,7 @@ def insereSlots(sigla):
         opc = input(f"Qual atribuir horários? ").upper()
         if opc == "Q":
             break
-        if opc:
+        if opc and opc.isnumeric() and int(opc) < len(aux):
             turma = options[int(opc)]
             nslots = disciplinas.curriculum[sigla]["slt"] if turma.endswith("T") else disciplinas.curriculum[sigla]["slp"]
             while True:

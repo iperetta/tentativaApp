@@ -1,0 +1,70 @@
+FAMAT31011,Cálculo Diferencial e Integral I,C1,1,90,0,90
+FAMAT31021,Geometria Analítica,GA,1,60,0,60
+FEELT31103,Introdução à Engenharia de Computação,IEC,1,30,0,30
+FEELT31107,Programação Script,PS,1,30,30,60
+FEELT31108,Programação Funcional,PF,1,30,15,45
+FEELT31109,Enriquecimento Instrumental,EI,1,0,30,30
+FEELT39040A,TEEC: Lógica para Engenharia de Computação,LOG,1,30,15,45
+FAMAT31012,Cálculo Diferencial e Integral II,C2,2,90,0,90
+FAMAT31022,Álgebra Linear,ALG,2,45,0,45
+FEELT31201,Programação Procedimental,PP,2,30,30,60
+FEELT31204,Metrologia,MET,2,30,30,60
+FEELT39040B,TEEC: Matemática Discreta,MD,2,30,15,45
+INFIS39031,Física Básica: Mecânica,MEC,2,60,0,60
+INFIS39032,Experimental de Física Básica: Mecânica,EMEC,2,0,30,30
+FAMAT31013,Cálculo Diferencial e Integral III,C3,3,90,0,90
+FEELT31301,Circuitos Elétricos I,CEI,3,75,0,75
+FEELT31302,Experimental de Circuitos Elétricos I,ECE1,3,0,15,15
+FEELT31514,Programação Orientada a Objetos,POO,3,30,30,60
+INFIS39033,Física Básica: Eletricidade e Magnetismo,MAG,3,60,0,60
+INFIS39034,Experimental de Física Básica: Eletricidade e Magnetismo,EMAG,3,0,30,30
+FAMAT31031,Métodos Matemáticos,MM,4,75,0,75
+FEELT31401,Eletrônica Analógica I,ELA1,4,60,0,60
+FEELT31402,Experimental de Eletrônica Analógica I,EELA1,4,0,30,30
+FEELT31407,Programação Lógica e Inteligência Artificial,PLIA,4,30,15,45
+FEELT31408,Banco de Dados,BD,4,30,15,45
+FEELT31409,Sistemas Digitais,SDG,4,30,0,30
+FEELT31410,Experimental de Sistemas Digitais,ESDG,4,0,30,30
+FAMAT31033,Estatística,EST,5,60,0,60
+FEELT31521,Tecnologias Web e Mobile,TWM,5,30,15,45
+FEELT31522,Engenharia de Software,ESOF,5,30,15,45
+FEELT31523,Sistemas Embarcados I,SEMB1,5,45,30,75
+FEELT31524,Elementos de Sistemas Computacionais,ESC,5,30,15,45
+FEELT31525,Arquitetura e Organização de Computadores,AOC,5,30,15,45
+FEELT31526,Sinais e Multimídia,SMULT,5,30,15,45
+FEELT31623,Design Colaborativo,DC,6,30,15,45
+FEELT31624,Arquitetura de Software Aplicada,ASA,6,30,15,45
+FEELT31625,Sistemas e Controle,SCON,6,30,15,45
+FEELT31626,Aprendizagem de Máquina,AMAQ,6,30,15,45
+FEELT31627,Sistemas Operacionais,SO,6,30,15,45
+FEELT31628,Teoria da Computação,TCOMP,6,30,15,45
+FADIR39901,Ciências Sociais e Jurídicas,CSJ,7,60,0,60
+FEELT31721,Computação Gráfica RV-RA,CG,7,30,15,45
+FEELT31722,Robótica,ROB,7,45,15,60
+FEELT31723,Otimização e Simulação,OSIM,7,30,15,45
+FEELT31724,Redes de Comunicações I,RC1,7,45,15,60
+FEELT31725,Sistemas Computacionais em Tempo Real,SCTR,7,30,15,45
+FAGEN39901,Administração,ADM,8,60,0,60
+FEELT31829,Segurança de Sistemas Computacionais,SEG,8,30,15,45
+FEELT31830,Sistemas Distribuídos,SDIST,8,30,15,45
+FEELT31831,Redes de Comunicações II,RC2,8,45,15,60
+IEUFU39901,Ciências Econômicas,CECO,8,60,0,60
+FEELT39040C,TEEC: Cloud Computing Architecture AWS,CCAWS,99,30,15,45
+FEELT39040D,TEEC: Estrutura de Dados,ED,99,30,15,45
+FEELT39040E,TEEC: Bancos de Dados Não Relacionais,BDNR,99,30,15,45
+FEELT39040F,TEEC: Desenvolvimento de Jogos com uso de Realidade Virtual e Aumentada,DJRVA,99,30,15,45
+FEELT39040G,TEEC: Computação Evolutiva,CEVO,99,30,15,45
+FEELT39040H,TEEC: Computação Quântica,CQU,99,30,15,45
+FEELT39040I,TEEC: Projeto e Análise de Algoritmos,PAA,99,30,15,45
+FEELT39040J,TEEC: Jogos Sérios Associados à Realidade Virtual e Aumentada Aplicados à Engenharia,JSRVA,99,30,15,45
+FEELT39040K,TEEC: Aplicações Web em Clojure,AWC,99,30,15,45
+FEELT31713,Redes Industriais para Controle e Automação I,RICA1,7,60,15,75
+FEELT39039,Eletricidade Aplicada,ELAP,99,30,30,60
+FEELT39016X,TEEC: Estruturas de Dados,EDA,3,60,0,60
+FEELT39016F,TEEC: Arquitetura e Organização de Computadores,AOCA,5,60,0,60
+FEELT39016G,TEEC: Sistemas Operacionais,SOA,6,60,0,60
+FAMAT31032,Cálculo Numérico,CN,7,60,0,60
+FEELT31717,Processamento Digital de Sinais,PDS,5,60,0,60
+FEELT39040L,TEEC: Resolução de Problemas II,RP2,99,30,15,45
+FEELT31203,Lógica e Matemática Discreta,LMD,2,45,15,60
+FEELT39040O,TEEC: Contratos Inteligentes e Segurança Blockchain,CISB,99,30,15,45

@@ -249,7 +249,7 @@ class Planejamento:
                         m += " "
                     header.append(m)
                 print(" "*12 + "|" + "|".join(header))
-                print("-"*HLINE)
+                print("—"*HLINE)
                 for hor in self.rows:
                     linesincols = list()
                     for dia in self.cols:
@@ -270,11 +270,18 @@ class Planejamento:
                                 row.append(" "*NC)
                         print("|".join(row))
                         if l == nlines - 1:
-                            print("-"*HLINE)
+                            if hor[0] in ["11:30", "17:40", "21:40"]:
+                                print("—"*HLINE)
+                            else:
+                                print("-"*HLINE)
                     if nlines == 0:
                         print(f"{hor[0]:>5s}~{hor[1]:>5s}", end=" |")
                         print("|".join([" "*NC]*len(self.cols)))
-                        print("-"*HLINE)
+                        if hor[0] in ["11:30", "17:40", "21:40"]:
+                            print("—"*HLINE)
+                            # print("—"*(HLINE//2)+("" if HLINE%2 == 0 else "-"))
+                        else:
+                            print("-"*HLINE)
 
                     
 

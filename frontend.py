@@ -175,6 +175,8 @@ def mostraDisciplina(sigla):
             print(f"--- Horários: {horario}")
     else:
         print("< Sem turmas >")
+    if "obs" in disciplinas.curriculum[sigla]:
+        print("*** OBS.:", disciplinas.curriculum[sigla]["obs"])
     print("")
 
 def modificaPropriedades(sigla):
@@ -198,6 +200,18 @@ def modificaPropriedades(sigla):
         if input(f"Deseja continuar [s/N]? ").upper() in ["", "N"]:
             return
         disciplinas.curriculum[sigla][prop] = novo
+        disciplinas.curriculum[sigla]['obs'] = input("Informe observação sobre modificação:\n")
+        print("Alteração realizada!")
+    if prop == 'slt' or prop == 'slp':
+        while True:
+            novo = input("Informe o novo número de slots: ")
+            if novo.isnumeric():
+                novo = int(novo)
+                break
+        if input(f"Deseja continuar [s/N]? ").upper() in ["", "N"]:
+            return
+        disciplinas.curriculum[sigla][prop] = novo
+        disciplinas.curriculum[sigla]['obs'] = input("Informe observação sobre modificação:\n")
         print("Alteração realizada!")
     
 

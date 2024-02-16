@@ -13,7 +13,7 @@ FEELT39040B,TEEC: Matemática Discreta,MD,2,30,15,45
 INFIS39031,Física Básica: Mecânica,MEC,2,60,0,60
 INFIS39032,Experimental de Física Básica: Mecânica,EMEC,2,0,30,30
 FAMAT31013,Cálculo Diferencial e Integral III,C3,3,90,0,90
-FEELT31301,Circuitos Elétricos I,CEI,3,75,0,75
+FEELT31301,Circuitos Elétricos I,CE1,3,75,0,75
 FEELT31302,Experimental de Circuitos Elétricos I,ECE1,3,0,15,15
 FEELT31514,Programação Orientada a Objetos,POO,3,30,30,60
 INFIS39033,Física Básica: Eletricidade e Magnetismo,EMAG,3,60,0,60

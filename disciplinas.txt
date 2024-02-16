@@ -16,8 +16,8 @@ FAMAT31013,Cálculo Diferencial e Integral III,C3,3,90,0,90
 FEELT31301,Circuitos Elétricos I,CEI,3,75,0,75
 FEELT31302,Experimental de Circuitos Elétricos I,ECE1,3,0,15,15
 FEELT31514,Programação Orientada a Objetos,POO,3,30,30,60
-INFIS39033,Física Básica: Eletricidade e Magnetismo,MAG,3,60,0,60
-INFIS39034,Experimental de Física Básica: Eletricidade e Magnetismo,EMAG,3,0,30,30
+INFIS39033,Física Básica: Eletricidade e Magnetismo,EMAG,3,60,0,60
+INFIS39034,Experimental de Física Básica: Eletricidade e Magnetismo,EEMAG,3,0,30,30
 FAMAT31031,Métodos Matemáticos,MM,4,75,0,75
 FEELT31401,Eletrônica Analógica I,ELA1,4,60,0,60
 FEELT31402,Experimental de Eletrônica Analógica I,EELA1,4,0,30,30

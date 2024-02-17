@@ -160,8 +160,8 @@ def apagaSlots(sigla):
 
 def mostraDisciplina(sigla):
     disciplina = disciplinas.curriculum[sigla]
-    print(f"\n({sigla}) {disciplina["codigo"]} > {disciplina["nome"]}")
-    print(f"{disciplina["periodo"]}º período | Carga Horária: {disciplina["cht"]} (T) + {disciplina["chp"]} (P) = {disciplina["ch"]}")
+    print(f"\n({sigla}) {disciplina['codigo']} > {disciplina['nome']}")
+    print(f"{disciplina['periodo']}º período | Carga Horária: {disciplina['cht']} (T) + {disciplina['chp']} (P) = {disciplina['ch']}")
     print("Turmas:")
     if disciplinas.curriculum[sigla]["turmas"]:
         for k, v in disciplinas.curriculum[sigla]["turmas"].items():
@@ -221,7 +221,7 @@ while True:
     print("    MENU")
     print("============\n")
     if SIGLA:
-        print(f"FOCO: ({SIGLA}) {disciplinas.curriculum[SIGLA]["codigo"]} {disciplinas.curriculum[SIGLA]["nome"]}")
+        print(f"FOCO: ({SIGLA}) {disciplinas.curriculum[SIGLA]['codigo']} {disciplinas.curriculum[SIGLA]['nome']}")
         print("Completo:", disciplinas.iscomplete(SIGLA)[0])
     else:
         print(f"Disciplina ativa: Nenhuma")

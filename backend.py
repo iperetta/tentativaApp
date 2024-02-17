@@ -1,5 +1,3 @@
-import numpy as np
-
 class Semanas:
     def __init__(self):
         def code(x):

@@ -68,3 +68,6 @@ FEELT31717,Processamento Digital de Sinais,PDS,5,60,0,60
 FEELT39040L,TEEC: Resolução de Problemas II,RP2,99,30,15,45
 FEELT31203,Lógica e Matemática Discreta,LMD,2,45,15,60
 FEELT39040O,TEEC: Contratos Inteligentes e Segurança Blockchain,CISB,99,30,15,45
+EL065A,TEEC IV: Algoritmos Genéticos,POSAG,099,45,0,45
+EL065B,TEEC IV: Realidade Virtual e Aumentada,POSRVA,99,45,0,45
+PPGEB20B,EOR II: Análise e Programação Orientada a Objetos,POSOOP,99,45,0,45

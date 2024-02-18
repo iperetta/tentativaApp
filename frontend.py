@@ -25,11 +25,11 @@ SIGLA = ""
 
 pause = lambda : input("Tecle ENTER ...")
 
-def entraSigla():
+def entraSigla(msg="Informe sigla: ", force=False):
     global SIGLA
-    if SIGLA:
+    if SIGLA and not force:
         return SIGLA
-    sigla = input("Informe sigla: ").upper()
+    sigla = input(msg).upper()
     if sigla in disciplinas.curriculum:
         SIGLA = sigla
         return sigla
@@ -238,10 +238,14 @@ while True:
     print(" AH - Apaga Horários (slots)")
     print(" PP - imPrimir um Período")
     print(" PT - imPrimir Todos os períodos")
+    print(" PD - imPrimir um Docente")
+    print(" PO - imPrimir tOdos os Docentes")
     print(" CH - Conflito Horário")
     print(" CD - Conflito Docente")
     print(" MP - Modifica Propriedades")
     print(" S  - Salva planejamento")
+    print(" OB  - OBservações")
+    print(" RC  - Relatório engenharia de Computação")
     print(" Q  - sair (Quit)")
     opc = input("Opção: ").upper()
     if 0 < opc.count("*") < len(opc):
@@ -258,8 +262,13 @@ while True:
     elif opc == "F":
         print("\n>> Falta informação em:")
         for m in disciplinas.missing():
-            print(*m)
+            foco = disciplinas.curriculum[m[0]]
+            print(f"> {m[0]:>7s} {foco['codigo']} {foco['nome']}",*m[1:])
         print("")
+        sigla = entraSigla("Informe sigla, se desejar assumir [ENTER p/ cancelar]: ", force=True)
+        if not sigla:
+            continue
+        SIGLA = sigla
     elif opc == "*":
         SIGLA = ""
     elif opc == "ID":
@@ -306,6 +315,32 @@ while True:
             planejamento.print(disciplinas, int(per))
     elif opc == "PT":
         planejamento.print(disciplinas)
+    elif opc == "PD":
+        while True:
+            doc = input("Informe o docente [ENTER para cancelar]: ").title()
+            if doc == "" or doc in DOCENTE:
+                break
+        if doc:
+            planejamento.printDocentes(disciplinas, DOCENTE[doc])
+    elif opc == "RC":
+        ecpdocs = [
+            "Cardoso",
+            "Lamounier",
+            "Louza",
+            "Peretta",
+            "Keiji",
+            "Kil",
+            "Barros",
+            "Rodrigues",
+            "Cunha",
+        ]
+        for doc in ecpdocs:
+            planejamento.printDocentes(disciplinas, DOCENTE[doc])
+        planejamento.conflitoHorarios(disciplinas)
+        planejamento.conflitoProfessores(disciplinas, docs=ecpdocs)   
+        planejamento.printHoraAulaDocentes(disciplinas, ecpdocs)
+    elif opc == "PO":
+        planejamento.printDocentes(disciplinas)
     elif opc == "C":
         print("\n>> Informação completa em:")
         for m in disciplinas.complete():
@@ -314,13 +349,24 @@ while True:
     elif opc == "CH":
         planejamento.conflitoHorarios(disciplinas)
     elif opc == "CD":
-        print("NÃO IMPLEMENTADO AINDA!")
-        pass
+        planejamento.conflitoProfessores(disciplinas)
     elif opc == "MP":
         sigla = entraSigla()
         if not sigla:
             continue
         modificaPropriedades(sigla)
+    elif opc == "OB":
+        print("OBSERVAÇÕES:")
+        fno = "observações.txt"
+        with open(fno, "r") as f:
+            for line in list(l.strip() for l in f.readlines() if l.strip()):
+                print(line)
+        while True:
+            obs = input("INCLUIR [ENTER p/ cancelar]: ")
+            if obs == "":
+                break
+            with open(fno, "a") as f:
+                f.write("- " + obs + "\n")
     elif opc == "Q":
         if input("Deseja salvar alterações antes de sair [s/N]? ").upper().startswith("S"):
             with open(planFile, "wb") as f:

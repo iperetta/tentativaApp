@@ -71,3 +71,4 @@ FEELT39040O,TEEC: Contratos Inteligentes e Segurança Blockchain,CISB,99,30,15,4
 EL065A,TEEC IV: Algoritmos Genéticos,POSAG,099,45,0,45
 EL065B,TEEC IV: Realidade Virtual e Aumentada,POSRVA,99,45,0,45
 PPGEB20B,EOR II: Análise e Programação Orientada a Objetos,POSOOP,99,45,0,45
+FEELT39040P,TEEC: Desenvolvimento de hardware e firmware para IoT,DIOT,99,30,15,45

@@ -160,6 +160,7 @@ def apagaSlots(sigla):
 
 def mostraDisciplina(sigla):
     disciplina = disciplinas.curriculum[sigla]
+    planejamento.printDisciplina(disciplinas, sigla)
     print(f"\n({sigla}) {disciplina['codigo']} > {disciplina['nome']}")
     print(f"{disciplina['periodo']}º período | Carga Horária: {disciplina['cht']} (T) + {disciplina['chp']} (P) = {disciplina['ch']}")
     print("Turmas:")

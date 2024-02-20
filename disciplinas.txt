@@ -55,7 +55,7 @@ FEELT39040E,TEEC: Bancos de Dados Não Relacionais,BDNR,99,30,15,45
 FEELT39040F,TEEC: Desenvolvimento de Jogos com uso de Realidade Virtual e Aumentada,DJRVA,99,30,15,45
 FEELT39040G,TEEC: Computação Evolutiva,CEVO,99,30,15,45
 FEELT39040H,TEEC: Computação Quântica,CQU,99,30,15,45
-FEELT39040I,TEEC: Projeto e Análise de Algoritmos,PAA,99,30,15,45
+FEELT39040I,TEEC: Projeto e Análise de Algoritmos,PAA,4,30,15,45
 FEELT39040J,TEEC: Jogos Sérios Associados à Realidade Virtual e Aumentada Aplicados à Engenharia,JSRVA,99,30,15,45
 FEELT39040K,TEEC: Aplicações Web em Clojure,AWC,99,30,15,45
 FEELT31713,Redes Industriais para Controle e Automação I,RICA1,7,60,15,75
@@ -72,3 +72,5 @@ EL065A,TEEC IV: Algoritmos Genéticos,POSAG,099,45,0,45
 EL065B,TEEC IV: Realidade Virtual e Aumentada,POSRVA,99,45,0,45
 PPGEB20B,EOR II: Análise e Programação Orientada a Objetos,POSOOP,99,45,0,45
 FEELT39040P,TEEC: Desenvolvimento de hardware e firmware para IoT,DIOT,99,30,15,45
+FEELT39016H,TEEC: Projeto e Análise de Algoritmos,PAAA,4,60,0,60
+FEELT39042,Resolução de Problemas,RP,99,30,15,45

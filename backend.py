@@ -200,7 +200,14 @@ class Planejamento:
                 for d in tinf.docentes:
                     for s in tinf.slots:
                         docentes[d][s[1], s[0]].append((tinf.parent, tinf.id, tinf.tipo))
-        return docentes
+    def prepareDisciplinas(self, disciplinas):
+        all_disciplinas = dict(zip(disciplinas.curriculum.keys(), list(ListMatrixByLabels(self.rows, self.cols) \
+                                                                   for _ in range(len(disciplinas.curriculum.keys())))))
+        for k, v in disciplinas.curriculum.items():
+            for tid, tinf in v["turmas"].items():
+                for s in tinf.slots:
+                    all_disciplinas[k][s[1], s[0]].append((tinf.parent, tinf.id, tinf.tipo))
+        return all_disciplinas
     def conflitoHorarios(self, disciplinas):
         print("\nCONFLITOS DE HORÁRIOS:")
         prep_disc = self.prepare(disciplinas)     
@@ -364,6 +371,59 @@ class Planejamento:
         for doc in docsinteresse:
             docente = DOCENTE[doc]
             print(f"> Docente: {docente} : {horas[docente]} HA por semana")
+        print("")
+    def printDisciplina(self, disciplinas, discinteresse=None):
+        NC = 20
+        HLINE = (13+(NC+1)*6)
+        prep_disc = self.prepareDisciplinas(disciplinas)
+        print("")
+        for sigladisc, matriz in prep_disc.items():
+            if sigladisc != DOCENTE["?"] and discinteresse is None or sigladisc == discinteresse:
+                print("="*HLINE)
+                print(f"    Disciplina: ({sigladisc}) {disciplinas.curriculum[sigladisc]['codigo']} {disciplinas.curriculum[sigladisc]['nome']}")
+                print("="*HLINE)
+                header = list()
+                for s in self.cols:
+                    x = NC//2 - (2 if NC%2 == 0 else 1)
+                    m = " "*x + s + " "*x
+                    while len(m) < NC:
+                        m += " "
+                    header.append(m)
+                print(" "*12 + "|" + "|".join(header))
+                print("—"*HLINE)
+                for hor in self.rows:
+                    linesincols = list()
+                    for dia in self.cols:
+                        linesincols.append(len(matriz[hor, dia]))
+                    nlines = max(linesincols)
+                    for l in range(nlines):
+                        if l == 0:
+                            print(f"{hor[0]:>5s}~{hor[1]:>5s}", end=" |")
+                        else:
+                            print(" "*12 + "|", end="")
+                        row = list()
+                        for dia in self.cols:
+                            if len(matriz[hor, dia]) > l:
+                                info = matriz[hor, dia][l]
+                                per = disciplinas.curriculum[info[0]]["periodo"]
+                                aux = f"{info[0]}/{info[1]}({info[2]}).{'OPT' if per == 99 else str(per)+'ºP'}"
+                                eval(f"row.append(f'{aux:^{NC}s}')")
+                            else:
+                                row.append(" "*NC)
+                        print("|".join(row))
+                        if l == nlines - 1:
+                            if hor[0] in ["11:30", "17:40", "21:40"]:
+                                print("—"*HLINE)
+                            else:
+                                print("-"*HLINE)
+                    if nlines == 0:
+                        print(f"{hor[0]:>5s}~{hor[1]:>5s}", end=" |")
+                        print("|".join([" "*NC]*len(self.cols)))
+                        if hor[0] in ["11:30", "17:40", "21:40"]:
+                            print("—"*HLINE)
+                            # print("—"*(HLINE//2)+("" if HLINE%2 == 0 else "-"))
+                        else:
+                            print("-"*HLINE)
         print("")
                     
 

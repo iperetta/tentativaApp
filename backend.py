@@ -200,6 +200,7 @@ class Planejamento:
                 for d in tinf.docentes:
                     for s in tinf.slots:
                         docentes[d][s[1], s[0]].append((tinf.parent, tinf.id, tinf.tipo))
+        return docentes
     def prepareDisciplinas(self, disciplinas):
         all_disciplinas = dict(zip(disciplinas.curriculum.keys(), list(ListMatrixByLabels(self.rows, self.cols) \
                                                                    for _ in range(len(disciplinas.curriculum.keys())))))
@@ -378,7 +379,7 @@ class Planejamento:
         prep_disc = self.prepareDisciplinas(disciplinas)
         print("")
         for sigladisc, matriz in prep_disc.items():
-            if sigladisc != DOCENTE["?"] and discinteresse is None or sigladisc == discinteresse:
+            if discinteresse is None or sigladisc == discinteresse:
                 print("="*HLINE)
                 print(f"    Disciplina: ({sigladisc}) {disciplinas.curriculum[sigladisc]['codigo']} {disciplinas.curriculum[sigladisc]['nome']}")
                 print("="*HLINE)

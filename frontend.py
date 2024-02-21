@@ -303,13 +303,26 @@ while True:
             continue
         mostraDisciplina(sigla)
     elif opc == "M":
-        lookup = unidecode(input("Informe codigo, nome ou padrão de busca: ")).upper()
-        for k, v in disciplinas.curriculum.items():
-            if lookup in v["codigo"] or lookup in unidecode(v["nome"]).upper():
-                print(v["codigo"], v["nome"]," > ", k)
-        sigla = input("Qual sigla deseja trabalhar [ENTER para cancelar]: ").upper()
-        if sigla and sigla in disciplinas.curriculum:
-            SIGLA = sigla
+        while True:
+            lookup = unidecode(input("Informe codigo, nome ou padrão de busca: ")).upper()
+            if not lookup in disciplinas.curriculum:
+                for k, v in disciplinas.curriculum.items():
+                    if lookup in v["codigo"] or lookup in unidecode(v["nome"]).upper():
+                        print(v["codigo"], v["nome"]," > ", k)
+                sigla = input("Qual sigla deseja trabalhar [ENTER para cancelar]: ").upper()
+                if sigla and sigla in disciplinas.curriculum:
+                    SIGLA = sigla
+                    break
+                elif sigla == "":
+                    break
+                else:
+                    print("Não encontrado!")
+            else:
+                sigla = lookup
+                v = disciplinas.curriculum[sigla]
+                print("Assumindo:", v["codigo"], v["nome"]," > ", sigla)
+                SIGLA = sigla
+                break
     elif opc == "AD": # apaga docente
         sigla = entraSigla()
         if not sigla:

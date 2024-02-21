@@ -215,3 +215,8 @@ convert.py
 tempCodeRunnerFile.py
 test.py
 *.docx
+*.jpg
+*.jpeg
+x.txt
+Short*.txt
+open.py

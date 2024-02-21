@@ -262,7 +262,7 @@ class Planejamento:
         NC = 20
         HLINE = (13+(NC+1)*6)
         prep_disc = self.prepare(disciplinas)
-        for periodo, matriz in prep_disc.items():
+        for periodo, matriz in sorted(prep_disc.items(), key=lambda x: x[0]):
             siglas = set()
             if perinteresse is None or periodo == perinteresse:
                 print("")
@@ -320,7 +320,7 @@ class Planejamento:
         prep_disc = self.prepareDocentes(disciplinas)
         horas = self.somaHorariosDocente(disciplinas)
         print("")
-        for docente, matriz in prep_disc.items():
+        for docente, matriz in sorted(prep_disc.items(), key=lambda x: x[0]):
             siglas = set()
             if docente != DOCENTE["?"] and docinteresse is None or docente == docinteresse:
                 print("="*HLINE)
@@ -384,7 +384,7 @@ class Planejamento:
         HLINE = (13+(NC+1)*6)
         prep_disc = self.prepareDisciplinas(disciplinas)
         print("")
-        for sigladisc, matriz in prep_disc.items():
+        for sigladisc, matriz in sorted(prep_disc.items(), key=lambda x: x[0]):
             if discinteresse is None or sigladisc == discinteresse:
                 print("="*HLINE)
                 print(f"    Disciplina: ({sigladisc}) {disciplinas.curriculum[sigladisc]['codigo']} {disciplinas.curriculum[sigladisc]['nome']}")

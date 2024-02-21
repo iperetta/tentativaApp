@@ -210,8 +210,9 @@ class Planejamento:
                     all_disciplinas[k][s[1], s[0]].append((tinf.parent, tinf.id, tinf.tipo))
         return all_disciplinas
     def conflitoHorarios(self, disciplinas):
-        print("\nCONFLITOS DE HORÁRIOS:")
-        prep_disc = self.prepare(disciplinas)     
+        print(f"\nCONFLITOS DE HORÁRIOS:")
+        prep_disc = self.prepare(disciplinas)
+        conflitos = 0
         for periodo, matriz in prep_disc.items():
             for hor in self.rows:
                 linesincols = list()
@@ -220,6 +221,7 @@ class Planejamento:
                     linesincols.append(len(siglas))
                 nlines = max(linesincols)
                 if nlines > 1:
+                    conflitos += 1
                     dia = self.cols[linesincols.index(nlines)]
                     print(f"- {str(periodo)}º período" if periodo != 99 else "- Optativas", end=" ==> ")
                     print(f"{dia} ({hor[0]}~{hor[1]}) : ", end= "")
@@ -227,22 +229,26 @@ class Planejamento:
                     for info in matriz[hor, dia]:
                         listadisc.append(f"{info[0]}/{info[1]}({info[2]})")
                     print("; ".join(listadisc))
+        print(f"TOTAL: {conflitos} conflitos")
         print("")
     def conflitoProfessores(self, disciplinas, docs=[]):
         print("\nCONFLITOS DE PROFESSORES:")
         prep_disc = self.prepareDocentes(disciplinas)
+        conflitos = 0
         for k, v in prep_disc.items():
             if (k != DOCENTE["?"] and docs == []) or k in list(DOCENTE[d] for d in docs):
                 for hor in self.rows:
                     for dia in self.cols:
                         siglas = set(s[0] for s in v[hor, dia])
                         if len(siglas) > 1:
+                            conflitos += 1
                             print(f"- {k} ==> {dia} ({hor[0]}~{hor[1]}) : ", end= "")
                             listadisc = list()
                             for info in v[hor, dia]:
                                 per = disciplinas.curriculum[info[0]]["periodo"]
                                 listadisc.append(f"{info[0]}/{info[1]}({info[2]}).{'OPT' if per == 99 else str(per)+'ºP'}")
                             print("; ".join(listadisc))
+        print(f"TOTAL: {conflitos} conflitos")
         print("")
     def somaHorariosDocente(self, disciplinas):
         prep_disc = self.prepareDocentes(disciplinas)

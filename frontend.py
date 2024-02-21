@@ -162,7 +162,8 @@ def mostraDisciplina(sigla):
     disciplina = disciplinas.curriculum[sigla]
     planejamento.printDisciplina(disciplinas, sigla)
     print(f"\n({sigla}) {disciplina['codigo']} > {disciplina['nome']}")
-    print(f"{disciplina['periodo']}º período | Carga Horária: {disciplina['cht']} (T) + {disciplina['chp']} (P) = {disciplina['ch']}")
+    print(f"- {disciplina['periodo']}º período" if disciplina['periodo'] != 99 else "- Optativa", end=" | ")
+    print(f"Carga Horária: {disciplina['cht']} (T) + {disciplina['chp']} (P) = {disciplina['ch']} horas")
     print("Turmas:")
     if disciplinas.curriculum[sigla]["turmas"]:
         for k, v in disciplinas.curriculum[sigla]["turmas"].items():
@@ -201,7 +202,9 @@ def modificaPropriedades(sigla):
         if input(f"Deseja continuar [s/N]? ").upper() in ["", "N"]:
             return
         disciplinas.curriculum[sigla][prop] = novo
-        disciplinas.curriculum[sigla]['obs'] = input("Informe observação sobre modificação:\n")
+        observa = input("Informe observação sobre modificação [ENTER p/ não informar]:\n")
+        if observa:
+            disciplinas.curriculum[sigla]['obs'] = observa
         print("Alteração realizada!")
     if prop == 'slt' or prop == 'slp':
         while True:
@@ -212,7 +215,18 @@ def modificaPropriedades(sigla):
         if input(f"Deseja continuar [s/N]? ").upper() in ["", "N"]:
             return
         disciplinas.curriculum[sigla][prop] = novo
-        disciplinas.curriculum[sigla]['obs'] = input("Informe observação sobre modificação:\n")
+        observa = input("Informe observação sobre modificação [ENTER p/ não informar]:\n")
+        if observa:
+            disciplinas.curriculum[sigla]['obs'] = observa
+        print("Alteração realizada!")
+    if prop == 'nome':
+        novo = input("Informe o novo nome: ")
+        if input(f"Deseja continuar [s/N]? ").upper() in ["", "N"]:
+            return
+        disciplinas.curriculum[sigla][prop] = novo
+        observa = input("Informe observação sobre modificação [ENTER p/ não informar]:\n")
+        if observa:
+            disciplinas.curriculum[sigla]['obs'] = observa
         print("Alteração realizada!")
     
 
@@ -245,8 +259,8 @@ while True:
     print(" CD - Conflito Docente")
     print(" MP - Modifica Propriedades")
     print(" S  - Salva planejamento")
-    print(" OB  - OBservações")
-    print(" RC  - Relatório engenharia de Computação")
+    print(" OB - OBservações")
+    print(" RC - Relatório engenharia de Computação")
     print(" Q  - sair (Quit)")
     opc = input("Opção: ").upper()
     if 0 < opc.count("*") < len(opc):

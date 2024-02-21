@@ -1,3 +1,6 @@
+NC = 20
+HLINE = (13+(NC+1)*6)
+
 class Semanas:
     def __init__(self):
         def code(x):
@@ -66,6 +69,10 @@ class Turmas:
         self.nslots = nslots
     def __repr__(self):
         return f"Turmas OBJ: {self.parent} {self.id} {self.tipo}"
+    def isSameRoom(self, other):
+        return self.parent == other.parent and \
+            all(list(sd in other.docentes for sd in self.docentes)) and \
+            all(list(s in other.slots for s in self.slots))
 
 class Disciplinas:
     def load(self, filename):
@@ -175,6 +182,8 @@ class ListMatrixByLabels:
         self.data[self.rows.index(row)][self.cols.index(col)].append(value)
     def __repr__(self):
         return str(self.data)
+    def iter(self):
+        return list((r, c) for c in self.cols for r in self.rows)
 
 
 class Planejamento:
@@ -315,8 +324,6 @@ class Planejamento:
                 print(f"> {s:>7s}:", disciplinas.curriculum[s]['codigo'], disciplinas.curriculum[s]['nome'])
         print("")
     def printDocentes(self, disciplinas, docinteresse=None):
-        NC = 20
-        HLINE = (13+(NC+1)*6)
         prep_disc = self.prepareDocentes(disciplinas)
         horas = self.somaHorariosDocente(disciplinas)
         print("")
@@ -374,10 +381,31 @@ class Planejamento:
         print("")
     def printHoraAulaDocentes(self, disciplinas, docsinteresse=[]):
         horas = self.somaHorariosDocente(disciplinas)
-        print("Horas-Aula por Docente")
+        print("\nHoras-Aula por Docente\n".upper())
         for doc in docsinteresse:
+            discdoc = self.disciplinasDocente(disciplinas, doc) #[sigla][turma,tipo] list((dia, horaini, horafim))
             docente = DOCENTE[doc]
-            print(f"> Docente: {docente} : {horas[docente]} HA por semana")
+            msg = f"> Docente: {docente} : {horas[docente]} HA por semana "
+            print(msg + "="*(HLINE-len(msg)))
+            for k, v in sorted(discdoc.items(), key=lambda x: x[0]):
+                print(f"- {disciplinas.curriculum[k]['codigo']} {disciplinas.curriculum[k]['nome']} ---")
+                sames, diffs = v
+                for same in sames:
+                    t = list()
+                    for tt in sorted(same, key=lambda x:(x.id, ord('T') - ord(x.tipo))):
+                        t.append(f"{tt.id} ({tt.tipo})")
+                    print(f"-- Turma{'s' if len(t) > 1 else ''} {', '.join(t)}: ", end="")
+                    seq = list()
+                    for s in sorted(list(same)[0].slots):
+                        seq.append(f"{s[0]} {s[1][0]}~{s[1][1]}")
+                    print("; ".join(seq))
+                for turma in sorted(diffs, key=lambda x:(x.id, ord('T') - ord(x.tipo))):
+                    print(f"-- Turma {turma.id} ({turma.tipo}): ", end="")
+                    seq = list()
+                    for s in sorted(turma.slots):
+                        seq.append(f"{s[0]} {s[1][0]}~{s[1][1]}")
+                    print("; ".join(seq))
+            print("")
         print("")
     def printDisciplina(self, disciplinas, discinteresse=None):
         NC = 20
@@ -432,8 +460,34 @@ class Planejamento:
                         else:
                             print("-"*HLINE)
         print("")
-                    
-
+    def disciplinasDocente(self, disciplinas, docente):
+        if docente.title() in DOCENTE:
+            docente = DOCENTE[docente.title()]
+        aulas = dict()
+        for sigla, info in disciplinas.curriculum.items():
+            for tt, turma in info["turmas"].items():
+                tid, tipo = tt.split(":")
+                if docente in turma.docentes:
+                    if not sigla in aulas:
+                        aulas[sigla] = list()
+                    aulas[sigla].append(turma)
+        aulasx = dict()
+        for sigla, turmas in aulas.items():
+            allturmas = set()
+            sames = list()
+            for t in turmas:
+                same = set()
+                allturmas.add(t)
+                for u in turmas:
+                    if t != u and t.isSameRoom(u):
+                        same.add(t)
+                        same.add(u)
+                if same and not same in sames:
+                    sames.append(same)
+            for s in sames:
+                allturmas -= s
+            aulasx[sigla] = (sames, allturmas)
+        return aulasx
 
 
 
@@ -452,6 +506,7 @@ if __name__ == "__main__":
     disciplinas.setTurma("SEMB1", "A2")
     disciplinas.setTurma("SEMB1", "B1")
     disciplinas.setTurma("SEMB1", "B2")
+    disciplinas.setTurma("SEMB1", "C")
     disciplinas.setTurma("CQU", "X3")
     disciplinas.setTurma("AWC", "R")
     disciplinas.curriculum["SDIST"]["turmas"]["C:T"].slots.append(semanas.slot("2M1"))
@@ -469,6 +524,26 @@ if __name__ == "__main__":
     disciplinas.curriculum["AWC"]["turmas"]["R:P"].slots.append(semanas.slot("4T5"))
     disciplinas.curriculum["AWC"]["turmas"]["R:T"].docentes.append(DOCENTE["Cunha"])
     disciplinas.curriculum["AWC"]["turmas"]["R:P"].docentes.append(DOCENTE["Cunha"])
+    disciplinas.curriculum["SEMB1"]["turmas"]["A1:T"].slots.append(semanas.slot("4T3"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["A1:T"].slots.append(semanas.slot("4T4"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["A1:T"].slots.append(semanas.slot("4T5"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["A2:T"].slots.append(semanas.slot("4T3"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["A2:T"].slots.append(semanas.slot("4T4"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["A2:T"].slots.append(semanas.slot("4T5"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["A1:T"].docentes.append(DOCENTE["Barros"])
+    disciplinas.curriculum["SEMB1"]["turmas"]["A2:T"].docentes.append(DOCENTE["Barros"])
+    disciplinas.curriculum["SEMB1"]["turmas"]["B1:T"].slots.append(semanas.slot("6T3"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["B1:T"].slots.append(semanas.slot("6T4"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["B1:T"].slots.append(semanas.slot("6T5"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["B2:T"].slots.append(semanas.slot("6T3"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["B2:T"].slots.append(semanas.slot("6T4"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["B2:T"].slots.append(semanas.slot("6T5"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["B1:T"].docentes.append(DOCENTE["Barros"])
+    disciplinas.curriculum["SEMB1"]["turmas"]["B2:T"].docentes.append(DOCENTE["Barros"])
+    disciplinas.curriculum["SEMB1"]["turmas"]["C:T"].slots.append(semanas.slot("6M3"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["C:T"].slots.append(semanas.slot("6M4"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["C:T"].slots.append(semanas.slot("6M5"))
+    disciplinas.curriculum["SEMB1"]["turmas"]["C:T"].docentes.append(DOCENTE["Barros"])
     # for m in disciplinas.missing():
     #     print(m)
     print(disciplinas.curriculum["SDIST"]["turmas"]["C:T"].slots)
@@ -489,3 +564,6 @@ if __name__ == "__main__":
     # print(m)
     print(planeja.prepareDocentes(disciplinas))
     planeja.printDocentes(disciplinas)
+
+    print(planeja.disciplinasDocente(disciplinas, 'barros'))
+    planeja.printHoraAulaDocentes(disciplinas,["Barros"])

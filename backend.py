@@ -388,7 +388,14 @@ class Planejamento:
             msg = f"> Docente: {docente} : {horas[docente]} HA por semana "
             print(msg + "="*(HLINE-len(msg)))
             for k, v in sorted(discdoc.items(), key=lambda x: x[0]):
-                print(f"- {disciplinas.curriculum[k]['codigo']} {disciplinas.curriculum[k]['nome']} ---")
+                print(f"- {disciplinas.curriculum[k]['codigo']} {disciplinas.curriculum[k]['nome']} --- ", end="")
+                periodo = disciplinas.curriculum[k]['periodo']
+                if periodo == 99 and k.startswith("POS"):
+                    print("Pós")
+                elif periodo == 99:
+                    print("Optativa")
+                else:
+                    print(f"{periodo}º período")
                 sames, diffs = v
                 for same in sames:
                     t = list()

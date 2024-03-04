@@ -74,3 +74,4 @@ PPGEB20B,EOR II: Análise e Programação Orientada a Objetos,POSOOP,99,45,0,45
 FEELT39040P,TEEC: Desenvolvimento de hardware e firmware para IoT,DIOT,99,30,15,45
 FEELT39016H,TEEC: Projeto e Análise de Algoritmos,PAAA,4,60,0,60
 FEELT39042,Resolução de Problemas,RP,99,30,15,45
+GSI037,Interação Humano-Computador,IHC,6,60,0,60

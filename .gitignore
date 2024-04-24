@@ -222,3 +222,5 @@ Short*.txt
 open.py
 mlp.py
 test.txt
+*.tmp
+tmp.*

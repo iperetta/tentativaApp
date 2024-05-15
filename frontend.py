@@ -3,6 +3,9 @@ from backend import disciplinas as new_disciplinas
 from unidecode import unidecode
 import re, os
 import pickle as pk
+import easygui as eg
+import pandas as pd
+from datetime import datetime as dt
 
 planFile = "planning.pk"
 
@@ -24,6 +27,21 @@ else:
 SIGLA = ""
 
 pause = lambda : input("Tecle ENTER ...")
+
+def mostraDF(subdf, dsubdf):
+    old = ""
+    for ind in subdf.index:
+        docente = dsubdf.loc[dsubdf["COD_TURMA"] == subdf["COD_TURMA"][ind], "NOME_DOCENTE"].values
+        if subdf["COD_TURMA"][ind] != old:
+            print('>> ', subdf["COD_DISCIPLINA"][ind], end=" ")
+            print("   ", subdf["NOME_DISCIPLINA"][ind], end=" ")
+            print(" - Turma", subdf["COD_TURMA"][ind])
+            print("   ", "Docentes", docente)
+        print("    -", subdf["TIPO_AULA"][ind], "(", subdf["NUM_SALA"][ind], ")", subdf["DIA_SEMANA"][ind], end=" ")
+        print(dt.time(subdf["HR_INICIO"][ind]), end=" ")
+        print(dt.time(subdf["HR_FIM"][ind]))
+        old = subdf["COD_TURMA"][ind]
+    print("")
 
 def entraSigla(msg="Informe sigla: ", force=False):
     global SIGLA
@@ -261,6 +279,7 @@ while True:
     print(" S  - Salva planejamento")
     print(" OB - OBservações")
     print(" RC - Relatório engenharia de Computação")
+    print(" CO - Comparar com ofertas")
     print(" Q  - sair (Quit)")
     opc = input("Opção: ").upper()
     if 0 < opc.count("*") < len(opc):
@@ -395,6 +414,23 @@ while True:
                 break
             with open(fno, "a") as f:
                 f.write("- " + obs + "\n")
+    elif opc == "CO":
+        dxlsfn = eg.fileopenbox(title='Selecione arquivo com docentes em ofertas (SG 11.02.03.99.10)', default="../*.xlsx",
+                               filetypes=[["*", "All files"], ["*.xls","*.xlsx","*.ods", "Excel Files"]])
+        if dxlsfn:
+            xlsfn = eg.fileopenbox(title='Selecione arquivo com ofertas (SG 11.02.03.99.02)', default="../*.xlsx",
+                                filetypes=[["*", "All files"], ["*.xls","*.xlsx","*.ods", "Excel Files"]])
+            if xlsfn:
+                df = pd.read_excel(xlsfn)
+                ddf = pd.read_excel(dxlsfn)
+                df = df.map(lambda x: x.strip() if isinstance(x, str) else x)
+                ddf = ddf.map(lambda x: x.strip() if isinstance(x, str) else x)
+                for k, v in disciplinas.curriculum.items():
+                    mostraDisciplina(k)
+                    subdf = df[df["COD_DISCIPLINA"] == v['codigo']]
+                    dsubdf = ddf[ddf["COD_DISCIPLINA"] == v['codigo']]
+                    mostraDF(subdf, dsubdf[["COD_TURMA","NOME_DOCENTE"]])
+                    input("Tecle ENTER pra continuar... ")
     elif opc == "Q":
         if input("Deseja salvar alterações antes de sair [s/N]? ").upper().startswith("S"):
             with open(planFile, "wb") as f:

@@ -1,8 +1,7 @@
-- PS, modificar vagas de A2 p/ A1 (evitar conflito com PF)
-- Refletir sobre SDIST
-- Realocar CG (ou excluir da oferta CG ou ESOF)
-- DC, retirar de Marcelo, o que fazer com ela?
-- Conflito de horários p/ Louza
-- Diminuir vagas em ECE1/2 pois choca com POO/A1
-- - Incluir SMULT para PDS e OSIM para CN
-- Sugerir na oferta RC1 como 6º período
+- BD -> Lab 1E13 (no lugar de PLIA)
+- PLIA -> não será ofertada
+- TWM -> não será ofertada
+- ASA -> não será ofertada
+- PAAA -> não será ofertada
+- TEEC:EP -> nova oferta
+- Troca de RP por RP2 (usar mesmo lab)

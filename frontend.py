@@ -6,15 +6,7 @@ import pickle as pk
 import easygui as eg
 import pandas as pd
 from datetime import datetime as dt
-import time
 import signal
-import threading
-
-# Function to simulate pressing ENTER
-def simulate_enter():
-    time.sleep(0.1)  # Give a slight delay before simulating ENTER
-    sys.stdout.write("\n")  # Write newline to stdout, simulating the user pressing ENTER
-    sys.stdout.flush()  # Flush to ensure it appears immediately
 
 def deseja_salvar():
     if input("Deseja salvar alterações antes de sair [s/N]? ").upper().startswith("S"):
@@ -23,12 +15,9 @@ def deseja_salvar():
             print("Alterações salvas!")
 
 def handle_sigint(signum, frame):
-    threading.Thread(target=simulate_enter).start()
-    deseja_salvar()
-    exit()
+    print("Se quiser sair, use a opção apropriada do menu.")
     
 signal.signal(signal.SIGINT, handle_sigint)
-# signal.siginterrupt(signal.SIGINT, False)
 
 planFile = "planning.pk"
 

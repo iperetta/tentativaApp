@@ -321,7 +321,11 @@ class Planejamento:
                         else:
                             print("-"*HLINE)
             for s in sorted(siglas):
-                print(f"> {s:>7s}:", disciplinas.curriculum[s]['codigo'], disciplinas.curriculum[s]['nome'])
+                docentes = []
+                for t in disciplinas.curriculum[s]["turmas"].values():
+                    docentes += t.docentes
+                docstr = ", ".join(list(d for d in set(docentes)))
+                print(f"> {s:>7s}:", disciplinas.curriculum[s]['codigo'], disciplinas.curriculum[s]['nome'],":",docstr)
         print("")
     def printDocentes(self, disciplinas, docinteresse=None):
         prep_disc = self.prepareDocentes(disciplinas)

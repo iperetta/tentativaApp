@@ -75,3 +75,4 @@ FEELT39040P,TEEC: Desenvolvimento de hardware e firmware para IoT,DIOT,99,30,15,
 FEELT39016H,TEEC: Projeto e Análise de Algoritmos,PAAA,4,60,0,60
 FEELT39042,Resolução de Problemas,RP,99,30,15,45
 GSI037,Interação Humano-Computador,IHC,6,60,0,60
+FEELT39040Q,TEEC: Engenharia de Prompt,EPR,99,30,15,45

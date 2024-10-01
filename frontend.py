@@ -1,11 +1,34 @@
 from backend import semanas, Planejamento, Turmas, DOCENTE
 from backend import disciplinas as new_disciplinas
 from unidecode import unidecode
-import re, os
+import re, os, sys
 import pickle as pk
 import easygui as eg
 import pandas as pd
 from datetime import datetime as dt
+import time
+import signal
+import threading
+
+# Function to simulate pressing ENTER
+def simulate_enter():
+    time.sleep(0.1)  # Give a slight delay before simulating ENTER
+    sys.stdout.write("\n")  # Write newline to stdout, simulating the user pressing ENTER
+    sys.stdout.flush()  # Flush to ensure it appears immediately
+
+def deseja_salvar():
+    if input("Deseja salvar alterações antes de sair [s/N]? ").upper().startswith("S"):
+        with open(planFile, "wb") as f:
+            pk.dump(disciplinas, f)
+            print("Alterações salvas!")
+
+def handle_sigint(signum, frame):
+    threading.Thread(target=simulate_enter).start()
+    deseja_salvar()
+    exit()
+    
+signal.signal(signal.SIGINT, handle_sigint)
+# signal.siginterrupt(signal.SIGINT, False)
 
 planFile = "planning.pk"
 
@@ -75,7 +98,7 @@ def apagaTurma(sigla):
         opc = input("Qual apagar? ").upper()
         if opc == "Q":
             break
-        if opc:
+        if opc and int(opc) in options:
             p, q = f"{options[int(opc)]}:T", f"{options[int(opc)]}:P"
             if p in disciplinas.curriculum[sigla]["turmas"]:
                 del disciplinas.curriculum[sigla]["turmas"][p]
@@ -250,192 +273,196 @@ def modificaPropriedades(sigla):
 
 planejamento = Planejamento()
 while True:
-    print("\n\n============")
-    print("    MENU")
-    print("============\n")
-    if SIGLA:
-        print(f"FOCO: ({SIGLA}) {disciplinas.curriculum[SIGLA]['codigo']} {disciplinas.curriculum[SIGLA]['nome']}")
-        print("Completo:", disciplinas.iscomplete(SIGLA)[0])
-    else:
-        print(f"Disciplina ativa: Nenhuma")
-    print("\n *  - limpa foco")
-    print(" M  - Muda foco de disciplina")
-    print(" F  - Faltando informação")
-    print(" C  - Completas")
-    print(" V  - Visualizar disciplina")
-    print(" IT - Insere Turma")
-    print(" ID - Insere Docentes")
-    print(" IH - Insere Horário (slots)")
-    print(" AT - Apaga Turma")
-    print(" AD - Apaga Docentes")
-    print(" AH - Apaga Horários (slots)")
-    print(" PP - imPrimir um Período")
-    print(" PT - imPrimir Todos os períodos")
-    print(" PD - imPrimir um Docente")
-    print(" PO - imPrimir tOdos os Docentes")
-    print(" CH - Conflito Horário")
-    print(" CD - Conflito Docente")
-    print(" MP - Modifica Propriedades")
-    print(" S  - Salva planejamento")
-    print(" OB - OBservações")
-    print(" RC - Relatório engenharia de Computação")
-    print(" CO - Comparar com ofertas")
-    print(" Q  - sair (Quit)")
-    opc = input("Opção: ").upper()
-    if 0 < opc.count("*") < len(opc):
-        SIGLA = ""
-        opc = opc.replace("*", "")
-    if opc in ["IT", "AT"]:
-        extra = entraSigla()
-        if not extra:
-            continue
-        if opc == "IT":
-            insereTurma(extra)
-        elif opc == "AT":
-            apagaTurma(extra)
-    elif opc == "F":
-        print("\n>> Falta informação em:")
-        for m in disciplinas.missing():
-            foco = disciplinas.curriculum[m[0]]
-            print(f"> {m[0]:>7s} {foco['codigo']} {foco['nome']}",*m[1:])
-        print("")
-        sigla = entraSigla("Informe sigla, se desejar assumir [ENTER p/ cancelar]: ", force=True)
-        if not sigla:
-            continue
-        SIGLA = sigla
-    elif opc == "*":
-        SIGLA = ""
-    elif opc == "ID":
-        sigla = entraSigla()
-        if not sigla:
-            continue
-        docente = input("Informe docente: ").title()
-        insereDocente(sigla, docente)
-    elif opc == "IH":
-        sigla = entraSigla()
-        if not sigla:
-            continue
-        insereSlots(sigla)
-    elif opc == "V":
-        sigla = entraSigla()
-        if not sigla:
-            continue
-        mostraDisciplina(sigla)
-    elif opc == "M":
-        while True:
-            lookup = unidecode(input("Informe codigo, nome ou padrão de busca: ")).upper()
-            if not lookup in disciplinas.curriculum:
-                for k, v in disciplinas.curriculum.items():
-                    if lookup in v["codigo"] or lookup in unidecode(v["nome"]).upper():
-                        print(v["codigo"], v["nome"]," > ", k)
-                sigla = input("Qual sigla deseja trabalhar [ENTER para cancelar]: ").upper()
-                if sigla and sigla in disciplinas.curriculum:
+    try:
+        print("\n\n============")
+        print("    MENU")
+        print("============\n")
+        if SIGLA:
+            print(f"FOCO: ({SIGLA}) {disciplinas.curriculum[SIGLA]['codigo']} {disciplinas.curriculum[SIGLA]['nome']}")
+            print("Completo:", disciplinas.iscomplete(SIGLA)[0])
+        else:
+            print(f"Disciplina ativa: Nenhuma")
+        print("\n *  - limpa foco")
+        print(" M  - Muda foco de disciplina")
+        print(" F  - Faltando informação")
+        print(" C  - Completas")
+        print(" V  - Visualizar disciplina")
+        print(" IT - Insere Turma")
+        print(" ID - Insere Docentes")
+        print(" IH - Insere Horário (slots)")
+        print(" AT - Apaga Turma")
+        print(" AD - Apaga Docentes")
+        print(" AH - Apaga Horários (slots)")
+        print(" PP - imPrimir um Período")
+        print(" PT - imPrimir Todos os períodos")
+        print(" PD - imPrimir um Docente")
+        print(" PO - imPrimir tOdos os Docentes")
+        print(" CH - Conflito Horário")
+        print(" CD - Conflito Docente")
+        print(" MP - Modifica Propriedades")
+        print(" S  - Salva planejamento")
+        print(" OB - OBservações")
+        print(" RC - Relatório engenharia de Computação")
+        print(" CO - Comparar com ofertas")
+        print(" Q  - sair (Quit)")
+        opc = input("Opção: ").upper()
+        if 0 < opc.count("*") < len(opc):
+            SIGLA = ""
+            opc = opc.replace("*", "")
+        if opc in ["IT", "AT"]:
+            extra = entraSigla()
+            if not extra:
+                continue
+            if opc == "IT":
+                insereTurma(extra)
+            elif opc == "AT":
+                apagaTurma(extra)
+        elif opc == "F":
+            print("\n>> Falta informação em:")
+            for m in disciplinas.missing():
+                foco = disciplinas.curriculum[m[0]]
+                print(f"> {m[0]:>7s} {foco['codigo']} {foco['nome']}",*m[1:])
+            print("")
+            sigla = entraSigla("Informe sigla, se desejar assumir [ENTER p/ cancelar]: ", force=True)
+            if not sigla:
+                continue
+            SIGLA = sigla
+        elif opc == "*":
+            SIGLA = ""
+        elif opc == "ID":
+            sigla = entraSigla()
+            if not sigla:
+                continue
+            docente = input("Informe docente: ").title()
+            insereDocente(sigla, docente)
+        elif opc == "IH":
+            sigla = entraSigla()
+            if not sigla:
+                continue
+            insereSlots(sigla)
+        elif opc == "V":
+            sigla = entraSigla()
+            if not sigla:
+                continue
+            mostraDisciplina(sigla)
+        elif opc == "M":
+            while True:
+                lookup = unidecode(input("Informe codigo, nome ou padrão de busca: ")).upper()
+                if not lookup in disciplinas.curriculum:
+                    for k, v in disciplinas.curriculum.items():
+                        if lookup in v["codigo"] or lookup in unidecode(v["nome"]).upper():
+                            print(v["codigo"], v["nome"]," > ", k)
+                    sigla = input("Qual sigla deseja trabalhar [ENTER para cancelar]: ").upper()
+                    if sigla and sigla in disciplinas.curriculum:
+                        SIGLA = sigla
+                        break
+                    elif sigla == "":
+                        break
+                    else:
+                        print("Não encontrado!")
+                else:
+                    sigla = lookup
+                    v = disciplinas.curriculum[sigla]
+                    print("Assumindo:", v["codigo"], v["nome"]," > ", sigla)
                     SIGLA = sigla
                     break
-                elif sigla == "":
-                    break
-                else:
-                    print("Não encontrado!")
-            else:
-                sigla = lookup
-                v = disciplinas.curriculum[sigla]
-                print("Assumindo:", v["codigo"], v["nome"]," > ", sigla)
-                SIGLA = sigla
-                break
-    elif opc == "AD": # apaga docente
-        sigla = entraSigla()
-        if not sigla:
-            continue
-        apagaDocente(sigla)
-    elif opc == "AH": # apaga horarios
-        sigla = entraSigla()
-        if not sigla:
-            continue
-        apagaSlots(sigla)
-    elif opc == "S":
-        with open(planFile, "wb") as f:
-            pk.dump(disciplinas, f)
-            print("Alterações salvas!")
-    elif opc == "PP":
-        per = input("Informe o período [99 p/ optativas, ENTER para cancelar]: ")
-        if per.isnumeric():
-            planejamento.print(disciplinas, int(per))
-    elif opc == "PT":
-        planejamento.print(disciplinas)
-    elif opc == "PD":
-        while True:
-            doc = input("Informe o docente [ENTER para cancelar]: ").title()
-            if doc == "" or doc in DOCENTE:
-                break
-        if doc:
-            planejamento.printDocentes(disciplinas, DOCENTE[doc])
-    elif opc == "RC":
-        ecpdocs = [
-            "Cardoso",
-            "Lamounier",
-            "Louza",
-            "Peretta",
-            "Keiji",
-            "Kil",
-            "Barros",
-            "Rodrigues",
-            "Cunha",
-        ]
-        for doc in ecpdocs:
-            planejamento.printDocentes(disciplinas, DOCENTE[doc])
-        planejamento.conflitoHorarios(disciplinas)
-        planejamento.conflitoProfessores(disciplinas, docs=ecpdocs)   
-        planejamento.printHoraAulaDocentes(disciplinas, ecpdocs)
-    elif opc == "PO":
-        planejamento.printDocentes(disciplinas)
-    elif opc == "C":
-        print("\n>> Informação completa em:")
-        for m in disciplinas.complete():
-            print(*m)
-        print("")
-    elif opc == "CH":
-        planejamento.conflitoHorarios(disciplinas)
-    elif opc == "CD":
-        planejamento.conflitoProfessores(disciplinas)
-    elif opc == "MP":
-        sigla = entraSigla()
-        if not sigla:
-            continue
-        modificaPropriedades(sigla)
-    elif opc == "OB":
-        print("OBSERVAÇÕES:")
-        fno = "observações.txt"
-        with open(fno, "r") as f:
-            for line in list(l.strip() for l in f.readlines() if l.strip()):
-                print(line)
-        while True:
-            obs = input("INCLUIR [ENTER p/ cancelar]: ")
-            if obs == "":
-                break
-            with open(fno, "a") as f:
-                f.write("- " + obs + "\n")
-    elif opc == "CO":
-        dxlsfn = eg.fileopenbox(title='Selecione arquivo com docentes em ofertas (SG 11.02.03.99.10)', default="../*.xlsx",
-                               filetypes=[["*", "All files"], ["*.xls","*.xlsx","*.ods", "Excel Files"]])
-        if dxlsfn:
-            xlsfn = eg.fileopenbox(title='Selecione arquivo com ofertas (SG 11.02.03.99.02)', default="../*.xlsx",
-                                filetypes=[["*", "All files"], ["*.xls","*.xlsx","*.ods", "Excel Files"]])
-            if xlsfn:
-                df = pd.read_excel(xlsfn)
-                ddf = pd.read_excel(dxlsfn)
-                df = df.map(lambda x: x.strip() if isinstance(x, str) else x)
-                ddf = ddf.map(lambda x: x.strip() if isinstance(x, str) else x)
-                for k, v in disciplinas.curriculum.items():
-                    mostraDisciplina(k)
-                    subdf = df[df["COD_DISCIPLINA"] == v['codigo']]
-                    dsubdf = ddf[ddf["COD_DISCIPLINA"] == v['codigo']]
-                    mostraDF(subdf, dsubdf[["COD_TURMA","NOME_DOCENTE"]])
-                    input("Tecle ENTER pra continuar... ")
-    elif opc == "Q":
-        if input("Deseja salvar alterações antes de sair [s/N]? ").upper().startswith("S"):
+        elif opc == "AD": # apaga docente
+            sigla = entraSigla()
+            if not sigla:
+                continue
+            apagaDocente(sigla)
+        elif opc == "AH": # apaga horarios
+            sigla = entraSigla()
+            if not sigla:
+                continue
+            apagaSlots(sigla)
+        elif opc == "S":
             with open(planFile, "wb") as f:
                 pk.dump(disciplinas, f)
                 print("Alterações salvas!")
-        break
+        elif opc == "PP":
+            per = input("Informe o período [99 p/ optativas, ENTER para cancelar]: ")
+            if per.isnumeric():
+                planejamento.print(disciplinas, int(per))
+        elif opc == "PT":
+            planejamento.print(disciplinas)
+        elif opc == "PD":
+            while True:
+                doc = input("Informe o docente [ENTER para cancelar]: ").title()
+                if doc == "" or doc in DOCENTE:
+                    break
+            if doc:
+                planejamento.printDocentes(disciplinas, DOCENTE[doc])
+        elif opc == "RC":
+            ecpdocs = [
+                "Cardoso",
+                "Lamounier",
+                "Louza",
+                "Peretta",
+                "Keiji",
+                "Kil",
+                "Barros",
+                "Rodrigues",
+                "Cunha",
+            ]
+            for doc in ecpdocs:
+                planejamento.printDocentes(disciplinas, DOCENTE[doc])
+            planejamento.conflitoHorarios(disciplinas)
+            planejamento.conflitoProfessores(disciplinas, docs=ecpdocs)   
+            planejamento.printHoraAulaDocentes(disciplinas, ecpdocs)
+        elif opc == "PO":
+            planejamento.printDocentes(disciplinas)
+        elif opc == "C":
+            print("\n>> Informação completa em:")
+            for m in disciplinas.complete():
+                print(*m)
+            print("")
+        elif opc == "CH":
+            planejamento.conflitoHorarios(disciplinas)
+        elif opc == "CD":
+            planejamento.conflitoProfessores(disciplinas)
+        elif opc == "MP":
+            sigla = entraSigla()
+            if not sigla:
+                continue
+            modificaPropriedades(sigla)
+        elif opc == "OB":
+            print("OBSERVAÇÕES:")
+            fno = "observações.txt"
+            with open(fno, "r") as f:
+                for line in list(l.strip() for l in f.readlines() if l.strip()):
+                    print(line)
+            while True:
+                obs = input("INCLUIR [ENTER p/ cancelar]: ")
+                if obs == "":
+                    break
+                with open(fno, "a") as f:
+                    f.write("- " + obs + "\n")
+        elif opc == "CO":
+            dxlsfn = eg.fileopenbox(title='Selecione arquivo com docentes em ofertas (SG 11.02.03.99.10)', default="../*.xlsx",
+                                filetypes=[["*", "All files"], ["*.xls","*.xlsx","*.ods", "Excel Files"]])
+            if dxlsfn:
+                xlsfn = eg.fileopenbox(title='Selecione arquivo com ofertas (SG 11.02.03.99.02)', default="../*.xlsx",
+                                    filetypes=[["*", "All files"], ["*.xls","*.xlsx","*.ods", "Excel Files"]])
+                if xlsfn:
+                    df = pd.read_excel(xlsfn)
+                    ddf = pd.read_excel(dxlsfn)
+                    df = df.map(lambda x: x.strip() if isinstance(x, str) else x)
+                    ddf = ddf.map(lambda x: x.strip() if isinstance(x, str) else x)
+                    for k, v in disciplinas.curriculum.items():
+                        mostraDisciplina(k)
+                        subdf = df[df["COD_DISCIPLINA"] == v['codigo']]
+                        dsubdf = ddf[ddf["COD_DISCIPLINA"] == v['codigo']]
+                        mostraDF(subdf, dsubdf[["COD_TURMA","NOME_DOCENTE"]])
+                        input("Tecle ENTER pra continuar... ")
+        elif opc == "Q":
+            # if input("Deseja salvar alterações antes de sair [s/N]? ").upper().startswith("S"):
+            #     with open(planFile, "wb") as f:
+            #         pk.dump(disciplinas, f)
+            #         print("Alterações salvas!")
+            deseja_salvar()
+            break
+    except KeyboardInterrupt:
+        print("COTRL+C detectado!")
     pause()
         
